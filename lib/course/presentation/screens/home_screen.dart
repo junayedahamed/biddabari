@@ -80,8 +80,19 @@ class HomeScreen extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 16.0),
             itemBuilder: (context, index) {
               final course = courseController.courseList[index];
-              return CourseCard.fromModel(
-                course: course,
+              return CourseCard(
+                courseId: course.id,
+                title: course.displayTitle,
+                subtitle: course.displaySubtitle,
+                bannerUrl: course.bannerUrl,
+                price: course.effectivePrice,
+                discountPrice: course.effectiveDiscountPrice,
+                discountEndDate: course.discountEndDate,
+                durationInMonths: course.parsedDurationInMonths,
+                totalClasses: course.parsedTotalClasses,
+                totalExams: course.parsedTotalExams,
+                isLive: course.isLiveCourse,
+                altText: course.altText,
                 onTap: () {
                   Get.toNamed(AppRoutes.courseDetails, arguments: course.id);
                 },

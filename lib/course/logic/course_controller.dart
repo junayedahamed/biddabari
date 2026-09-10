@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:biddabari/course/logic/network_service.dart';
 import 'package:biddabari/course/data/models/course_model.dart';
 import 'package:biddabari/course/data/repository/course_repository.dart';
 import 'package:get/get.dart';
@@ -7,11 +8,13 @@ class CourseController extends GetxController {
   final CourseRepository _courseRepository = CourseRepository();
   final Rx<DateTime> _now = DateTime.now().obs;
   Timer? _clockTimer;
+  Worker? _networkWorker;
 
   @override
   void onInit() {
     getCourses();
     _startClockTimer();
+    _observeNetwork();
     super.onInit();
   }
 
@@ -22,9 +25,31 @@ class CourseController extends GetxController {
     });
   }
 
+  void _observeNetwork() {
+    if (!Get.isRegistered<NetworkService>()) return;
+    final networkService = Get.find<NetworkService>();
+
+    _networkWorker = ever(networkService.isConnected, (bool connected) {
+      if (connected) {
+        _silentRefresh();
+      }
+    });
+  }
+
+  Future<void> _silentRefresh() async {
+    try {
+      print("refreshing....");
+      final result = await _courseRepository.getCourses();
+      if (result.isNotEmpty) {
+        courseList.value = result;
+      }
+    } catch (_) {}
+  }
+
   @override
   void onClose() {
     _clockTimer?.cancel();
+    _networkWorker?.dispose();
     super.onClose();
   }
 
@@ -33,21 +58,23 @@ class CourseController extends GetxController {
   RxBool get isGettingCourses => _isGettingCourses;
   final _errorMessage = ''.obs;
   RxString get errorMessage => _errorMessage;
-
+  // get courses
   Future<void> getCourses() async {
     try {
       _isGettingCourses.value = true;
+      _errorMessage.value = '';
       final result = await _courseRepository.getCourses();
       courseList.value = result;
     } catch (e) {
       _errorMessage.value = e.toString();
-      Get.snackbar("Error", e.toString());
+      if (courseList.isEmpty) {
+        Get.snackbar("Error", e.toString());
+      }
     } finally {
       _isGettingCourses.value = false;
     }
   }
 
-  /// Formats a duration into countdown format (e.g. 1d 04h 23m or 04h 23m 10s).
   String formatDuration(Duration duration) {
     final days = duration.inDays;
     final hours = duration.inHours.remainder(24);
@@ -63,13 +90,10 @@ class CourseController extends GetxController {
     }
   }
 
-  /// Evaluates the current remaining countdown text and expired state for a discount.
-  /// Subscribes to [_now] so Obx callers automatically update every second reactively.
   ({String? countdownText, bool isExpired}) evaluateDiscountCountdown({
     required bool hasDiscount,
     required String? discountEndDate,
   }) {
-    // Access reactive _now to bind Obx updates to controller timer
     final currentTime = _now.value;
 
     if (!hasDiscount) {

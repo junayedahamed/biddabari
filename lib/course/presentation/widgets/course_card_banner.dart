@@ -8,6 +8,7 @@ class CourseCardBanner extends StatelessWidget {
   final bool hasDiscount;
   final int discountPercentage;
   final String? discountEndDate;
+  final String? altText;
 
   const CourseCardBanner({
     super.key,
@@ -16,6 +17,7 @@ class CourseCardBanner extends StatelessWidget {
     this.hasDiscount = false,
     this.discountPercentage = 0,
     this.discountEndDate,
+    this.altText,
   });
 
   @override
@@ -44,7 +46,7 @@ class CourseCardBanner extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Image not available',
+                    altText ?? "",
                     style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
                   ),
                 ],
@@ -53,7 +55,6 @@ class CourseCardBanner extends StatelessWidget {
           ),
         ),
 
-        // Gradient overlay at bottom of image for smoother visual transition
         Positioned(
           left: 0,
           right: 0,
@@ -73,7 +74,6 @@ class CourseCardBanner extends StatelessWidget {
           ),
         ),
 
-        // Discount Badge (Top Left)
         if (hasDiscount)
           Positioned(
             top: 10,
@@ -85,7 +85,6 @@ class CourseCardBanner extends StatelessWidget {
             ),
           ),
 
-        // Live Badge (Top Right)
         if (isLive)
           Positioned(
             top: 10,

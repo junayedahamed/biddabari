@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:biddabari/course/data/models/course_model.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_banner.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_footer.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_stats.dart';
@@ -20,6 +19,7 @@ class CourseCard extends StatelessWidget {
   final String currencySymbol;
   final VoidCallback? onTap;
   final VoidCallback? onEnrollTap;
+  final String? altText;
 
   const CourseCard({
     super.key,
@@ -37,34 +37,8 @@ class CourseCard extends StatelessWidget {
     this.currencySymbol = '৳',
     this.onTap,
     this.onEnrollTap,
+    this.altText,
   });
-
-  /// Factory constructor to easily create CourseCard from [CourseModel]
-  factory CourseCard.fromModel({
-    Key? key,
-    required CourseModel course,
-    String currencySymbol = '৳',
-    VoidCallback? onTap,
-    VoidCallback? onEnrollTap,
-  }) {
-    return CourseCard(
-      key: key,
-      courseId: course.id,
-      title: course.displayTitle,
-      subtitle: course.displaySubtitle,
-      bannerUrl: course.bannerUrl,
-      price: course.effectivePrice,
-      discountPrice: course.effectiveDiscountPrice,
-      discountEndDate: course.discountEndDate,
-      durationInMonths: course.parsedDurationInMonths,
-      totalClasses: course.parsedTotalClasses,
-      totalExams: course.parsedTotalExams,
-      isLive: course.isLiveCourse,
-      currencySymbol: currencySymbol,
-      onTap: onTap,
-      onEnrollTap: onEnrollTap,
-    );
-  }
 
   bool get _hasDiscount => discountPrice != null && discountPrice! < price;
 
@@ -106,6 +80,7 @@ class CourseCard extends StatelessWidget {
               Hero(
                 tag: '${AppRoutes.heroBannerPrefix}$courseId',
                 child: CourseCardBanner(
+                  altText: altText,
                   bannerUrl: bannerUrl,
                   isLive: isLive,
                   hasDiscount: _hasDiscount,

@@ -2,8 +2,6 @@ import 'package:biddabari/course/logic/course_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// Isolated discount countdown chip built as a StatelessWidget.
-/// Uses Obx to listen to CourseController's reactive timer updates without setState.
 class DiscountCountdownChip extends StatelessWidget {
   final bool hasDiscount;
   final int discountPercentage;
