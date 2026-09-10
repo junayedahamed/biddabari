@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:biddabari/course/presentation/widgets/discount_countdown_chip.dart';
 
 class CourseCardBanner extends StatelessWidget {
   final String bannerUrl;
   final bool isLive;
   final bool hasDiscount;
   final int discountPercentage;
+  final String? discountEndDate;
 
   const CourseCardBanner({
     super.key,
@@ -13,6 +15,7 @@ class CourseCardBanner extends StatelessWidget {
     this.isLive = false,
     this.hasDiscount = false,
     this.discountPercentage = 0,
+    this.discountEndDate,
   });
 
   @override
@@ -75,33 +78,10 @@ class CourseCardBanner extends StatelessWidget {
           Positioned(
             top: 10,
             left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 4.0,
-              ),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFF5252), Color(0xFFFF1744)],
-                ),
-                borderRadius: BorderRadius.circular(6.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withValues(alpha: 0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                '$discountPercentage% OFF',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11.0,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
-                ),
-              ),
+            child: DiscountCountdownChip(
+              hasDiscount: hasDiscount,
+              discountPercentage: discountPercentage,
+              discountEndDate: discountEndDate,
             ),
           ),
 

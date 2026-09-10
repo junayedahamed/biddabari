@@ -10,6 +10,7 @@ class CourseCard extends StatelessWidget {
   final String bannerUrl;
   final double price;
   final double? discountPrice;
+  final String? discountEndDate;
   final int durationInMonths;
   final int totalClasses;
   final int totalExams;
@@ -25,6 +26,7 @@ class CourseCard extends StatelessWidget {
     required this.bannerUrl,
     required this.price,
     this.discountPrice,
+    this.discountEndDate,
     required this.durationInMonths,
     required this.totalClasses,
     required this.totalExams,
@@ -49,6 +51,7 @@ class CourseCard extends StatelessWidget {
       bannerUrl: course.bannerUrl,
       price: course.effectivePrice,
       discountPrice: course.effectiveDiscountPrice,
+      discountEndDate: course.discountEndDate,
       durationInMonths: course.parsedDurationInMonths,
       totalClasses: course.parsedTotalClasses,
       totalExams: course.parsedTotalExams,
@@ -101,6 +104,7 @@ class CourseCard extends StatelessWidget {
                 isLive: isLive,
                 hasDiscount: _hasDiscount,
                 discountPercentage: _discountPercentage,
+                discountEndDate: discountEndDate,
               ),
 
               // Card Content

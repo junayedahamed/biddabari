@@ -63,12 +63,66 @@ class CourseModel {
   String get displaySubtitle => subTitle ?? '';
   String get bannerUrl => banner ?? '';
   double get effectivePrice => price?.toDouble() ?? 0.0;
+
+  DateTime? get parsedDiscountStartDate {
+    if (discountStartDate == null || discountStartDate!.isEmpty) return null;
+    return DateTime.tryParse(discountStartDate!);
+  }
+
+  DateTime? get parsedDiscountEndDate {
+    if (discountEndDate == null || discountEndDate!.isEmpty) return null;
+    return DateTime.tryParse(discountEndDate!);
+  }
+
+  bool isDiscountActive([DateTime? now]) {
+    if (discountAmount == null ||
+        discountAmount! <= 0 ||
+        discountAmount! >= (price ?? 0)) {
+      return false;
+    }
+    final currentTime = now ?? DateTime.now();
+    final startDate = parsedDiscountStartDate;
+    if (startDate != null && currentTime.isBefore(startDate)) {
+      return false;
+    }
+    final endDate = parsedDiscountEndDate;
+    if (endDate != null && currentTime.isAfter(endDate)) {
+      return false;
+    }
+    return true;
+  }
+
   double? get effectiveDiscountPrice =>
-      (discountAmount != null &&
-          discountAmount! > 0 &&
-          discountAmount! < (price ?? 0))
-      ? discountAmount!.toDouble()
-      : null;
+      isDiscountActive() ? discountAmount!.toDouble() : null;
+
+  Duration? discountRemainingDuration([DateTime? now]) {
+    final currentTime = now ?? DateTime.now();
+    if (!isDiscountActive(currentTime)) return null;
+    final endDate = parsedDiscountEndDate;
+    if (endDate == null) return null;
+    final remaining = endDate.difference(currentTime);
+    return remaining.isNegative ? Duration.zero : remaining;
+  }
+
+  String? formatDiscountCountdown([DateTime? now]) {
+    final remaining = discountRemainingDuration(now);
+    if (remaining == null || remaining == Duration.zero) return null;
+
+    final days = remaining.inDays;
+    final hours = remaining.inHours.remainder(24);
+    final minutes = remaining.inMinutes.remainder(60);
+    final seconds = remaining.inSeconds.remainder(60);
+
+    if (days > 0) {
+      return '${days}d ${hours.toString().padLeft(2, '0')}h ${minutes.toString().padLeft(2, '0')}m';
+    } else if (hours > 0) {
+      return '${hours.toString().padLeft(2, '0')}h ${minutes.toString().padLeft(2, '0')}m ${seconds.toString().padLeft(2, '0')}s';
+    } else {
+      return '${minutes.toString().padLeft(2, '0')}m ${seconds.toString().padLeft(2, '0')}s';
+    }
+  }
+
+  String? get formattedDiscountCountdown => formatDiscountCountdown();
 
   int get parsedDurationInMonths =>
       int.tryParse(durationInMonth?.toString() ?? '') ?? 0;
