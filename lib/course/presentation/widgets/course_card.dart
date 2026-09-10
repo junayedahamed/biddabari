@@ -68,9 +68,6 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final primaryColor = theme.primaryColor;
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -91,10 +88,9 @@ class CourseCard extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16.0),
         clipBehavior: Clip.antiAlias,
-        child: InkWell(
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: onTap,
-          splashColor: primaryColor.withValues(alpha: 0.08),
-          highlightColor: primaryColor.withValues(alpha: 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

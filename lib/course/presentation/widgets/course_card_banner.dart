@@ -27,9 +27,7 @@ class CourseCardBanner extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
               color: Colors.grey.shade200,
-              child: const Center(
-                child: CircularProgressIndicator(strokeWidth: 2.0),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
             errorWidget: (context, url, error) => Container(
               color: Colors.grey.shade200,

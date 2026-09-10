@@ -93,10 +93,7 @@ class CourseCardFooter extends StatelessWidget {
               splashColor: Colors.white.withValues(alpha: 0.2),
               highlightColor: Colors.white.withValues(alpha: 0.1),
               child: const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 9.0,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 9.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
