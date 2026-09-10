@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:biddabari/course/data/models/course_model.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_banner.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_footer.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_stats.dart';
+import 'package:biddabari/router/app_routes.dart';
 
 class CourseCard extends StatelessWidget {
+  final int? courseId;
   final String title;
   final String subtitle;
   final String bannerUrl;
   final double price;
   final double? discountPrice;
+  final String? discountEndDate;
   final int durationInMonths;
   final int totalClasses;
   final int totalExams;
@@ -17,14 +19,17 @@ class CourseCard extends StatelessWidget {
   final String currencySymbol;
   final VoidCallback? onTap;
   final VoidCallback? onEnrollTap;
+  final String? altText;
 
   const CourseCard({
     super.key,
+    this.courseId,
     required this.title,
     required this.subtitle,
     required this.bannerUrl,
     required this.price,
     this.discountPrice,
+    this.discountEndDate,
     required this.durationInMonths,
     required this.totalClasses,
     required this.totalExams,
@@ -32,32 +37,8 @@ class CourseCard extends StatelessWidget {
     this.currencySymbol = '৳',
     this.onTap,
     this.onEnrollTap,
+    this.altText,
   });
-
-  /// Factory constructor to easily create CourseCard from [CourseModel]
-  factory CourseCard.fromModel({
-    Key? key,
-    required CourseModel course,
-    String currencySymbol = '৳',
-    VoidCallback? onTap,
-    VoidCallback? onEnrollTap,
-  }) {
-    return CourseCard(
-      key: key,
-      title: course.displayTitle,
-      subtitle: course.displaySubtitle,
-      bannerUrl: course.bannerUrl,
-      price: course.effectivePrice,
-      discountPrice: course.effectiveDiscountPrice,
-      durationInMonths: course.parsedDurationInMonths,
-      totalClasses: course.parsedTotalClasses,
-      totalExams: course.parsedTotalExams,
-      isLive: course.isLiveCourse,
-      currencySymbol: currencySymbol,
-      onTap: onTap,
-      onEnrollTap: onEnrollTap,
-    );
-  }
 
   bool get _hasDiscount => discountPrice != null && discountPrice! < price;
 
@@ -95,12 +76,17 @@ class CourseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Banner Image with overlays
-              CourseCardBanner(
-                bannerUrl: bannerUrl,
-                isLive: isLive,
-                hasDiscount: _hasDiscount,
-                discountPercentage: _discountPercentage,
+              // Banner Image with Hero animation
+              Hero(
+                tag: '${AppRoutes.heroBannerPrefix}$courseId',
+                child: CourseCardBanner(
+                  altText: altText,
+                  bannerUrl: bannerUrl,
+                  isLive: isLive,
+                  hasDiscount: _hasDiscount,
+                  discountPercentage: _discountPercentage,
+                  discountEndDate: discountEndDate,
+                ),
               ),
 
               // Card Content

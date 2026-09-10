@@ -1,5 +1,6 @@
 import 'package:biddabari/course/logic/course_controller.dart';
 import 'package:biddabari/course/presentation/widgets/course_card.dart';
+import 'package:biddabari/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         title: const Text(
           "Courses",
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -22,6 +24,27 @@ class HomeScreen extends StatelessWidget {
         if (courseController.isGettingCourses.value &&
             courseController.courseList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
+        }
+
+        if (courseController.errorMessage.isNotEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  courseController.errorMessage.value,
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => courseController.getCourses(),
+                  child: const Text("Retry"),
+                ),
+              ],
+            ),
+          );
         }
 
         if (courseController.courseList.isEmpty) {
@@ -57,13 +80,24 @@ class HomeScreen extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 16.0),
             itemBuilder: (context, index) {
               final course = courseController.courseList[index];
-              return CourseCard.fromModel(
-                course: course,
+              return CourseCard(
+                courseId: course.id,
+                title: course.displayTitle,
+                subtitle: course.displaySubtitle,
+                bannerUrl: course.bannerUrl,
+                price: course.effectivePrice,
+                discountPrice: course.effectiveDiscountPrice,
+                discountEndDate: course.discountEndDate,
+                durationInMonths: course.parsedDurationInMonths,
+                totalClasses: course.parsedTotalClasses,
+                totalExams: course.parsedTotalExams,
+                isLive: course.isLiveCourse,
+                altText: course.altText,
                 onTap: () {
-                  // Handle course tap
+                  Get.toNamed(AppRoutes.courseDetails, arguments: course.id);
                 },
                 onEnrollTap: () {
-                  // Handle enroll tap
+                  Get.toNamed(AppRoutes.courseDetails, arguments: course.id);
                 },
               );
             },

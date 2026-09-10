@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:biddabari/course/presentation/widgets/discount_countdown_chip.dart';
 
 class CourseCardBanner extends StatelessWidget {
   final String bannerUrl;
   final bool isLive;
   final bool hasDiscount;
   final int discountPercentage;
+  final String? discountEndDate;
+  final String? altText;
 
   const CourseCardBanner({
     super.key,
@@ -13,6 +16,8 @@ class CourseCardBanner extends StatelessWidget {
     this.isLive = false,
     this.hasDiscount = false,
     this.discountPercentage = 0,
+    this.discountEndDate,
+    this.altText,
   });
 
   @override
@@ -23,7 +28,8 @@ class CourseCardBanner extends StatelessWidget {
         AspectRatio(
           aspectRatio: 16 / 9,
           child: CachedNetworkImage(
-            imageUrl: bannerUrl,
+            imageUrl:
+                "https://storage.biddabari.online/biddabari-bucket/backend/assets/uploaded-files/course/course-banners/courses-1785592301-771938478695716.webp",
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
               color: Colors.grey.shade200,
@@ -41,7 +47,7 @@ class CourseCardBanner extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Image not available',
+                    altText ?? "",
                     style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
                   ),
                 ],
@@ -50,7 +56,6 @@ class CourseCardBanner extends StatelessWidget {
           ),
         ),
 
-        // Gradient overlay at bottom of image for smoother visual transition
         Positioned(
           left: 0,
           right: 0,
@@ -70,42 +75,17 @@ class CourseCardBanner extends StatelessWidget {
           ),
         ),
 
-        // Discount Badge (Top Left)
         if (hasDiscount)
           Positioned(
             top: 10,
             left: 10,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 4.0,
-              ),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFFF5252), Color(0xFFFF1744)],
-                ),
-                borderRadius: BorderRadius.circular(6.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.red.withValues(alpha: 0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                '$discountPercentage% OFF',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11.0,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
-                ),
-              ),
+            child: DiscountCountdownChip(
+              hasDiscount: hasDiscount,
+              discountPercentage: discountPercentage,
+              discountEndDate: discountEndDate,
             ),
           ),
 
-        // Live Badge (Top Right)
         if (isLive)
           Positioned(
             top: 10,
