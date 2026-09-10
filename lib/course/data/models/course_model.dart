@@ -27,10 +27,10 @@ class CourseModel {
   final String? discountEndDate;
   final String? altText;
   final String? bannerTitle;
-  final dynamic durationInMonth;
-  final dynamic totalClass;
-  final dynamic totalExam;
-  final dynamic totalLive;
+  final String? durationInMonth;
+  final String? totalClass;
+  final int? totalExam;
+  final int? totalLive;
   final String? orderStatus;
 
   CourseModel({
@@ -45,11 +45,12 @@ class CourseModel {
     this.discountEndDate,
     this.altText,
     this.bannerTitle,
+
+    this.orderStatus,
     this.durationInMonth,
     this.totalClass,
     this.totalExam,
     this.totalLive,
-    this.orderStatus,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) =>

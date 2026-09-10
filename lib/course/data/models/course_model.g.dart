@@ -31,11 +31,11 @@ CourseModel _$CourseModelFromJson(Map<String, dynamic> json) => CourseModel(
   discountEndDate: json['discount_end_date'] as String?,
   altText: json['alt_text'] as String?,
   bannerTitle: json['banner_title'] as String?,
-  durationInMonth: json['duration_in_month'],
-  totalClass: json['total_class'],
-  totalExam: json['total_exam'],
-  totalLive: json['total_live'],
   orderStatus: json['order_status'] as String?,
+  durationInMonth: json['duration_in_month'] as String?,
+  totalClass: json['total_class'] as String?,
+  totalExam: (json['total_exam'] as num?)?.toInt(),
+  totalLive: (json['total_live'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$CourseModelToJson(CourseModel instance) =>
