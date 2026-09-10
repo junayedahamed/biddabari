@@ -28,7 +28,8 @@ class CourseCardBanner extends StatelessWidget {
         AspectRatio(
           aspectRatio: 16 / 9,
           child: CachedNetworkImage(
-            imageUrl: bannerUrl,
+            imageUrl:
+                "https://storage.biddabari.online/biddabari-bucket/backend/assets/uploaded-files/course/course-banners/courses-1785592301-771938478695716.webp",
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
               color: Colors.grey.shade200,
