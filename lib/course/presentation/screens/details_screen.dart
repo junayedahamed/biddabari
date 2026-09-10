@@ -7,7 +7,12 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Details")),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("Details"),
+        surfaceTintColor: Colors.white,
+      ),
       body: Center(child: Text(id.toString())),
     );
   }
