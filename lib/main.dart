@@ -1,5 +1,5 @@
 import 'package:biddabari/course/bindings/course_bindings.dart';
-import 'package:biddabari/course/presentation/screens/home_screen.dart';
+import 'package:biddabari/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomeScreen(),
+      initialRoute: AppRoutes.home,
+      getPages: AppRoutes.routes,
     );
   }
 }

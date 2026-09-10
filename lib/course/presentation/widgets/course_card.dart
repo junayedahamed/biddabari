@@ -3,8 +3,10 @@ import 'package:biddabari/course/data/models/course_model.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_banner.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_footer.dart';
 import 'package:biddabari/course/presentation/widgets/course_card_stats.dart';
+import 'package:biddabari/router/app_routes.dart';
 
 class CourseCard extends StatelessWidget {
+  final int? courseId;
   final String title;
   final String subtitle;
   final String bannerUrl;
@@ -21,6 +23,7 @@ class CourseCard extends StatelessWidget {
 
   const CourseCard({
     super.key,
+    this.courseId,
     required this.title,
     required this.subtitle,
     required this.bannerUrl,
@@ -46,6 +49,7 @@ class CourseCard extends StatelessWidget {
   }) {
     return CourseCard(
       key: key,
+      courseId: course.id,
       title: course.displayTitle,
       subtitle: course.displaySubtitle,
       bannerUrl: course.bannerUrl,
@@ -98,13 +102,16 @@ class CourseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Banner Image with overlays
-              CourseCardBanner(
-                bannerUrl: bannerUrl,
-                isLive: isLive,
-                hasDiscount: _hasDiscount,
-                discountPercentage: _discountPercentage,
-                discountEndDate: discountEndDate,
+              // Banner Image with Hero animation
+              Hero(
+                tag: '${AppRoutes.heroBannerPrefix}$courseId',
+                child: CourseCardBanner(
+                  bannerUrl: bannerUrl,
+                  isLive: isLive,
+                  hasDiscount: _hasDiscount,
+                  discountPercentage: _discountPercentage,
+                  discountEndDate: discountEndDate,
+                ),
               ),
 
               // Card Content

@@ -31,6 +31,8 @@ class CourseController extends GetxController {
   RxList<CourseModel> courseList = <CourseModel>[].obs;
   final _isGettingCourses = false.obs;
   RxBool get isGettingCourses => _isGettingCourses;
+  final _errorMessage = ''.obs;
+  RxString get errorMessage => _errorMessage;
 
   Future<void> getCourses() async {
     try {
@@ -38,6 +40,7 @@ class CourseController extends GetxController {
       final result = await _courseRepository.getCourses();
       courseList.value = result;
     } catch (e) {
+      _errorMessage.value = e.toString();
       Get.snackbar("Error", e.toString());
     } finally {
       _isGettingCourses.value = false;
